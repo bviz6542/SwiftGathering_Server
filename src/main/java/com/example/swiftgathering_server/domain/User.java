@@ -1,21 +1,24 @@
 package com.example.swiftgathering_server.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
-@Getter @Setter
+@Data
+@Table(name = "MEMBER")
 public class User {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
     private String loginId;
 
     private String loginPassword;
+
+//    @Builder(builderMethodName = "createBuilder")
+//    public User(String loginId, String loginPassword) {
+//        this.loginId = loginId;
+//        this.loginPassword = loginPassword;
+//    }
 }
