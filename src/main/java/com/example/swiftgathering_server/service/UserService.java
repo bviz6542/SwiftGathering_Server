@@ -17,14 +17,16 @@ public class UserService {
     private final UserRepository userRepository;
     private static final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class);
 
-    @Transactional
     public void register(String loginId, String loginPassword) {
         User user = new User();
         user.setLoginId(loginId);
         user.setLoginPassword(loginPassword);
-
-        logger.info("id: {}, password: {}", loginId, loginPassword);
-
         userRepository.save(user);
+    }
+
+    public void verify(String loginId, String loginPassword) {
+        userRepository
+                .findByIdAndPassword(loginId, loginPassword)
+                .orElseThrow();
     }
 }

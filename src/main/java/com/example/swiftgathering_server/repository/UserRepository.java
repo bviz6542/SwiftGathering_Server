@@ -6,6 +6,8 @@ import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class UserRepository {
@@ -19,5 +21,14 @@ public class UserRepository {
 
     public User findOne(Long id) {
         return em.find(User.class, id);
+    }
+
+    public Optional<User> findByIdAndPassword(String id, String password) {
+        return em.createQuery("select u from User u where u.loginId = :id and u.loginPassword = :password", User.class)
+                .setParameter("id", id)
+                .setParameter("password", password)
+                .getResultList()
+                .stream()
+                .findAny();
     }
 }
