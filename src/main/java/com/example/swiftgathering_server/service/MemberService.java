@@ -1,11 +1,8 @@
 package com.example.swiftgathering_server.service;
 
-import com.example.swiftgathering_server.WebSocketHandler;
 import com.example.swiftgathering_server.domain.Member;
 import com.example.swiftgathering_server.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

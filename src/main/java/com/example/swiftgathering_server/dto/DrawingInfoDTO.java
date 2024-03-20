@@ -1,4 +1,4 @@
-package com.example.swiftgathering_server;
+package com.example.swiftgathering_server.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;

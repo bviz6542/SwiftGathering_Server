@@ -1,5 +1,6 @@
-package com.example.swiftgathering_server;
+package com.example.swiftgathering_server.websocket;
 
+import com.example.swiftgathering_server.dto.DrawingInfoDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -11,15 +12,9 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.web.socket.BinaryMessage;
-import org.springframework.web.socket.WebSocketSession;
-import java.io.IOException;
+
 import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
