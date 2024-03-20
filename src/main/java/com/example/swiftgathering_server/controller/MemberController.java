@@ -1,28 +1,27 @@
 package com.example.swiftgathering_server.controller;
 
-import com.example.swiftgathering_server.WebSocketHandler;
 import com.example.swiftgathering_server.dto.LoginDto;
-import com.example.swiftgathering_server.service.UserService;
+import com.example.swiftgathering_server.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequiredArgsConstructor
-public class UserController {
+public class MemberController {
 
-    private final UserService userService;
+    private final MemberService memberService;
 
-    @PostMapping ("/register")
+    @PostMapping ("/members")
     public ResponseEntity<Void> register(@RequestBody LoginDto loginDto) {
         String id = loginDto.getId();
         String password = loginDto.getPassword();
-        userService.register(id, password);
+        memberService.register(id, password);
         return ResponseEntity
                 .ok()
                 .build();
@@ -33,7 +32,7 @@ public class UserController {
         String id = loginDto.getId();
         String password = loginDto.getPassword();
         try {
-            userService.verify(id, password);
+            memberService.verify(id, password);
             return ResponseEntity
                     .ok()
                     .build();
