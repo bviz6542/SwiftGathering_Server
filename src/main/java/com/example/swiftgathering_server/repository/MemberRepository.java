@@ -1,8 +1,7 @@
 package com.example.swiftgathering_server.repository;
 
-import com.example.swiftgathering_server.domain.User;
+import com.example.swiftgathering_server.domain.Member;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -10,21 +9,21 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class UserRepository {
+public class MemberRepository {
 
     private final EntityManager em;
 
-    public Long save(User user) {
-        em.persist(user);
-        return user.getId();
+    public Long save(Member member) {
+        em.persist(member);
+        return member.getId();
     }
 
-    public User findOne(Long id) {
-        return em.find(User.class, id);
+    public Member findOne(Long id) {
+        return em.find(Member.class, id);
     }
 
-    public Optional<User> findByIdAndPassword(String id, String password) {
-        return em.createQuery("select u from User u where u.loginId = :id and u.loginPassword = :password", User.class)
+    public Optional<Member> findByIdAndPassword(String id, String password) {
+        return em.createQuery("select m from Member m where m.loginId = :id and m.loginPassword = :password", Member.class)
                 .setParameter("id", id)
                 .setParameter("password", password)
                 .getResultList()
