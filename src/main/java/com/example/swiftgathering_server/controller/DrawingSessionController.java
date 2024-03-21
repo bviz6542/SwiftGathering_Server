@@ -15,7 +15,7 @@ public class DrawingSessionController {
 
     @PostMapping
     public ResponseEntity<DrawingSession> createSession(@RequestBody DrawingSession session) {
-        DrawingSession savedSession = drawingSessionService.saveSession(session);
-        return ResponseEntity.ok(savedSession);
+        DrawingSession createdSession = drawingSessionService.createDrawingSession(session);
+        return ResponseEntity.ok(createdSession);
     }
 }

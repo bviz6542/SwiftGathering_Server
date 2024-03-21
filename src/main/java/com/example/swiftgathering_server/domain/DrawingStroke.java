@@ -17,12 +17,10 @@ public class DrawingStroke {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long strokeId;
 
-    @ManyToOne
-    @JoinColumn(name = "session_id", nullable = false)
-    private DrawingSession session;
-
-    @Column(columnDefinition = "JSON")
-    private String strokeData;
+    private Long sessionId; // Reference to the drawing session
+    private int startX, startY, endX, endY; // Coordinates
+    private String color; // Stroke color
+    private int thickness; // Stroke thickness
 
     private LocalDateTime createdAt;
 }
