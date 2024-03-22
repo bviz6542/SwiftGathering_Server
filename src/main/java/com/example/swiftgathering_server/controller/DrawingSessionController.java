@@ -13,9 +13,24 @@ public class DrawingSessionController {
 
     private final DrawingSessionService drawingSessionService;
 
-    @PostMapping
-    public ResponseEntity<DrawingSession> createSession(@RequestBody DrawingSession session) {
-        DrawingSession savedSession = drawingSessionService.saveSession(session);
-        return ResponseEntity.ok(savedSession);
+    @PostMapping("/start")
+    public ResponseEntity<DrawingSession> createSession(@RequestParam Long hostMemberId, @RequestParam Long guestMemberId) {
+        try {
+            DrawingSession newSession = drawingSessionService.createDrawingSession(hostMemberId, guestMemberId);
+            return ResponseEntity.ok(newSession);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/end/{sessionId}")
+    public ResponseEntity<String> endSession(@PathVariable Long sessionId) {
+        try {
+            drawingSessionService.findActiveSession(sessionId);
+            drawingSessionService.endDrawingSession(sessionId);
+            return ResponseEntity.ok().body("Session ended successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Session not found or already ended.");
+        }
     }
 }

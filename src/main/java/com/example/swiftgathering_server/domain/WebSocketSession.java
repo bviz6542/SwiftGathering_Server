@@ -5,14 +5,17 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "MEMBER")
-public class Member {
+public class WebSocketSession {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
     private Long id;
 
-    private String loginId;
-    private String loginPassword;
+    private String webSocketSessionId;
+
+    private Long hostMemberId;
+    private Long guestMemberId;
+
+    @ManyToOne
+    private DrawingSession drawingSession;
 }

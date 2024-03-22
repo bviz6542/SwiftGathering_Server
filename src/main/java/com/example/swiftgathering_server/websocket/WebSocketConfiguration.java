@@ -1,6 +1,7 @@
 package com.example.swiftgathering_server.websocket;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -9,13 +10,13 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 
 @Configuration
 @EnableWebSocket
-@RequiredArgsConstructor
 public class WebSocketConfiguration implements WebSocketConfigurer {
 
-    private final WebSocketHandler webSocketHandler;
+    @Autowired
+    private WebSocketHandler drawingWebSocketHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(webSocketHandler, "/drawing-strokes").setAllowedOrigins("*");
+        registry.addHandler(drawingWebSocketHandler, "/drawing-strokes").setAllowedOrigins("*");
     }
 }
