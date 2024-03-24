@@ -1,18 +1,27 @@
 package com.example.swiftgathering_server.domain;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Data
-@Table(name = "FRIENDSHIP")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "friendship")
 public class Friendship {
 
     @Id
-    @GeneratedValue
-    @Column(name = "friendship_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long earlierUserId;
     private Long laterUserId;
+
+    @Builder
+    Friendship(Long earlierUserId, Long laterUserId) {
+        this.earlierUserId = earlierUserId;
+        this.laterUserId = laterUserId;
+    }
 }

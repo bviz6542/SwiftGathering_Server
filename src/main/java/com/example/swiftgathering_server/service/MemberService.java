@@ -14,9 +14,10 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public void register(String loginId, String loginPassword) {
-        Member member = new Member();
-        member.setLoginId(loginId);
-        member.setLoginPassword(loginPassword);
+        Member member = Member.builder()
+                .loginId(loginId)
+                .loginPassword(loginPassword)
+                .build();
         memberRepository.save(member);
     }
 

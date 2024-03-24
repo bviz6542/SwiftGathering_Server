@@ -5,39 +5,29 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "draiwng_session")
-public class DrawingSession {
+@Table(name = "web_socket_session")
+public class WebSocketSession {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String webSocketSessionId;
+
     private Long hostMemberId;
     private Long guestMemberId;
 
-    private boolean isActive = true;
-
-    @CreatedDate
-    private LocalDateTime startTime;
-
-    @LastModifiedDate
-    private LocalDateTime endTime;
+    @ManyToOne
+    private DrawingSession drawingSession;
 
     @Builder
-    DrawingSession(Long hostMemberId, Long guestMemberId) {
+    WebSocketSession(String webSocketSessionId, Long hostMemberId, Long guestMemberId) {
+        this.webSocketSessionId = webSocketSessionId;
         this.hostMemberId = hostMemberId;
         this.guestMemberId = guestMemberId;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
     }
 }
