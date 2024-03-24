@@ -21,23 +21,23 @@ public class DrawingSessionService {
     private final DrawingSessionRepository drawingSessionRepository;
 
     public DrawingSession createDrawingSession(Long hostMemberId, Long guestMemberId) {
-        DrawingSession session = new DrawingSession();
-        session.setHostMemberId(hostMemberId);
-        session.setGuestMemberId(guestMemberId);
-        session.setActive(true);
+        DrawingSession session = DrawingSession.builder()
+                .hostMemberId(hostMemberId)
+                .guestMemberId(guestMemberId)
+                .build();
         return drawingSessionRepository.save(session);
     }
 
-    public void endDrawingSession(Long sessionId) {
-        drawingSessionRepository.findBySessionId(sessionId).ifPresent(session -> {
-            session.setActive(false);
+    public void endDrawingSession(Long id) {
+        drawingSessionRepository.findById(id).ifPresent(session -> {
+            session.setIsActive(false);
             drawingSessionRepository.delete(session);
         });
     }
 
-    public void findActiveSession(Long sessionId) {
-        drawingSessionRepository.findBySessionId(sessionId)
+    public void findActiveSession(Long id) {
+        drawingSessionRepository.findById(id)
                 .filter(DrawingSession::isActive)
-                .orElseThrow(() -> new NoSuchElementException("Active drawing session not found for ID: " + sessionId));
+                .orElseThrow(() -> new NoSuchElementException("Active drawing session not found for ID: " + id));
     }
 }
