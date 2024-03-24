@@ -33,6 +33,9 @@ public class FriendshipRepository {
         Set<Member> allFriends = new HashSet<>(friendsPart1);
         allFriends.addAll(friendsPart2);
 
-        return new ArrayList<>(allFriends);
+        return new ArrayList<>(allFriends)
+                .stream()
+                .sorted(Comparator.comparing(Member::getId))
+                .toList();
     }
 }
