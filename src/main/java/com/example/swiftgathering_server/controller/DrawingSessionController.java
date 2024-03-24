@@ -23,11 +23,11 @@ public class DrawingSessionController {
         }
     }
 
-    @PostMapping("/end/{sessionId}")
-    public ResponseEntity<String> endSession(@PathVariable Long sessionId) {
+    @PostMapping("/end/{id}")
+    public ResponseEntity<String> endSession(@PathVariable Long id) {
         try {
-            drawingSessionService.findActiveSession(sessionId);
-            drawingSessionService.endDrawingSession(sessionId);
+            drawingSessionService.findActiveSession(id);
+            drawingSessionService.endDrawingSession(id);
             return ResponseEntity.ok().body("Session ended successfully.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Session not found or already ended.");

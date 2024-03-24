@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface DrawingSessionRepository extends JpaRepository<DrawingSession, Long> {
-    Optional<DrawingSession> findBySessionId(Long sessionId);
+    Optional<DrawingSession> findById(Long id);
 }

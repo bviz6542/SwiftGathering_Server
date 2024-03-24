@@ -17,18 +17,20 @@ public class FriendshipService {
     private final FriendshipRepository friendshipRepository;
 
     public void saveFriendship(Long userId, Long friendId) {
-        if (friendId > userId) {
-            Friendship friendship = new Friendship();
-            friendship.setEarlierUserId(userId);
-            friendship.setLaterUserId(friendId);
-            friendshipRepository.save(friendship);
+        Friendship.FriendshipBuilder builder = Friendship.builder();
 
+        if (friendId > userId) {
+            builder
+                    .earlierUserId(userId)
+                    .laterUserId(friendId);
         } else {
-            Friendship friendship = new Friendship();
-            friendship.setEarlierUserId(friendId);
-            friendship.setLaterUserId(userId);
-            friendshipRepository.save(friendship);
+            builder
+                    .earlierUserId(friendId)
+                    .laterUserId(userId);
         }
+
+        Friendship friendship = builder.build();
+        friendshipRepository.save(friendship);
     }
 
     @Transactional(readOnly = true)

@@ -1,10 +1,15 @@
 package com.example.swiftgathering_server.domain;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Data
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "web_socket_session")
 public class WebSocketSession {
 
     @Id
@@ -18,4 +23,11 @@ public class WebSocketSession {
 
     @ManyToOne
     private DrawingSession drawingSession;
+
+    @Builder
+    WebSocketSession(String webSocketSessionId, Long hostMemberId, Long guestMemberId) {
+        this.webSocketSessionId = webSocketSessionId;
+        this.hostMemberId = hostMemberId;
+        this.guestMemberId = guestMemberId;
+    }
 }
