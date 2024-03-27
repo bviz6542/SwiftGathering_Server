@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.naming.AuthenticationException;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -24,6 +26,6 @@ public class MemberService {
     public void verify(String loginId, String loginPassword) {
         memberRepository
                 .findByIdAndPassword(loginId, loginPassword)
-                .orElseThrow();
+                .orElseThrow(() -> new AuthenticationException("Invalid login ID or password."));
     }
 }
