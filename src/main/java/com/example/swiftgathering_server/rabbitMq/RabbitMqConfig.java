@@ -30,17 +30,17 @@ public class RabbitMqConfig {
 
     @Bean
     DirectExchange directExchange() {
-        return new DirectExchange("hello.exchange");
+        return new DirectExchange("swift-gathering.exchange");
     }
 
     @Bean
     Queue queue() {
-        return new Queue("hello.queue", false);
+        return new Queue("swift-gathering.queue", false);
     }
 
     @Bean
     Binding binding(DirectExchange directExchange, Queue queue) {
-        return BindingBuilder.bind(queue).to(directExchange).with("hello.key");
+        return BindingBuilder.bind(queue).to(directExchange).with("swift-gathering.key");
     }
 
     @Bean

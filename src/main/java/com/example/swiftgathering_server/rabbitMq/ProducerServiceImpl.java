@@ -17,7 +17,7 @@ public class ProducerServiceImpl implements ProducerService {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             String objectToJSON = objectMapper.writeValueAsString(messageDto);
-            rabbitTemplate.convertAndSend("hello.exchange", "hello.key", objectToJSON);
+            rabbitTemplate.convertAndSend("swift-gathering.exchange", "swift-gathering.key", objectToJSON);
 
         } catch (JsonProcessingException jpe) {
             System.out.println("parsing error..");

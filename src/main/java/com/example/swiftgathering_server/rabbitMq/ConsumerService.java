@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ConsumerService {
 
-    @RabbitListener(queues = "hello.queue")
+    @RabbitListener(queues = "swift-gathering.queue")
     public void receiveMessage(String msg) {
 
     }

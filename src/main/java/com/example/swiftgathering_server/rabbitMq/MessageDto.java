@@ -3,7 +3,6 @@ package com.example.swiftgathering_server.rabbitMq;
 import lombok.*;
 
 @Getter
-@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MessageDto {
     private String title;

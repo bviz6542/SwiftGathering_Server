@@ -1,5 +1,6 @@
 package com.example.swiftgathering_server.rabbitMq;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/api/v1/producer")
+@RequiredArgsConstructor
+@RequestMapping(value = "/drawing-strokes")
 public class ProducerController {
 
-    @Autowired
-    private ProducerService producerService;
+    final private ProducerService producerService;
 
-    @PostMapping("/send")
+    @PostMapping("/publish")
     public ResponseEntity<Void> sendMessage(@RequestBody MessageDto messageDto) {
         producerService.sendMessage(messageDto);
         return ResponseEntity
