@@ -28,7 +28,7 @@ public class MemberController {
         try {
             memberService.verify(loginDto.getId(), loginDto.getPassword());
             return ResponseEntity.ok().build();
-        } catch (AuthenticationException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }

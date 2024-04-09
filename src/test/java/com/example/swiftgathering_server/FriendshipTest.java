@@ -4,6 +4,7 @@ import com.example.swiftgathering_server.domain.Friendship;
 import com.example.swiftgathering_server.domain.Member;
 import com.example.swiftgathering_server.repository.FriendshipRepository;
 import com.example.swiftgathering_server.repository.MemberRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,9 @@ public class FriendshipTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private EntityManager em;
+
     @Test
     public void 친구목록() {
         // given
@@ -43,25 +47,27 @@ public class FriendshipTest {
         Long member1Id = memberRepository.save(member1);
         Long member2Id = memberRepository.save(member2);
         Long member3Id = memberRepository.save(member3);
+        em.flush();
 
         // when
-        Friendship friendship1 = Friendship.builder()
-                .earlierUserId(member1Id)
-                .laterUserId(member2Id)
+        Friendship friendshipOf1And2 = Friendship.builder()
+                .olderMember(member1)
+                .youngerMember(member2)
                 .build();
-        Friendship friendship2 = Friendship.builder()
-                .earlierUserId(member2Id)
-                .laterUserId(member3Id)
+        Friendship friendshipOf2And3 = Friendship.builder()
+                .olderMember(member2)
+                .youngerMember(member3)
                 .build();
-        friendshipRepository.save(friendship1);
-        friendshipRepository.save(friendship2);
+        friendshipRepository.save(friendshipOf1And2);
+        friendshipRepository.save(friendshipOf2And3);
+        em.flush();
 
         // then
-        List<Long> fetchedFriends = friendshipRepository.findAllFriendsOfUser(member2Id)
+        List<Long> fetchedFriends = friendshipRepository.findAllFriendsOfUser(member2)
                 .stream()
                 .map(Member::getId)
                 .toList();
         List<Long> expectedFriends = List.of(member1Id, member3Id);
-        Assertions.assertArrayEquals(fetchedFriends.toArray(), expectedFriends.toArray());
+        Assertions.assertArrayEquals(expectedFriends.toArray(), fetchedFriends.toArray());
     }
 }

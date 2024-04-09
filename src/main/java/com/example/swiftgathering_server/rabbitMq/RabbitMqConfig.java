@@ -16,16 +16,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMqConfig {
 
-    @Value("${spring.rabbitmq.host}")
+    @Value("${spring.rabbitmq.host:localhost}")
     private String host;
 
-    @Value("${spring.rabbitmq.username}")
+    @Value("${spring.rabbitmq.username:guest}")
     private String username;
 
-    @Value("${spring.rabbitmq.password}")
+    @Value("${spring.rabbitmq.password:guest}")
     private String password;
 
-    @Value("${spring.rabbitmq.port}")
+    @Value("${spring.rabbitmq.port:15762}")
     private int port;
 
     @Bean
