@@ -26,6 +26,7 @@ public class MemberService {
     public void verify(String loginId, String loginPassword) {
         memberRepository
                 .findByIdAndPassword(loginId, loginPassword)
-                .orElseThrow(() -> new AuthenticationException("Invalid login ID or password."));
+                .orElseThrow();
+//                .orElseThrow(() -> new AuthenticationException("Invalid login ID or password."));
     }
 }

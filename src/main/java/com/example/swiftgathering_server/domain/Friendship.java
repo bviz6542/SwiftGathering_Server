@@ -12,16 +12,23 @@ import lombok.NoArgsConstructor;
 @Table(name = "friendship")
 public class Friendship {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private FriendshipId id;
 
-    private Long earlierUserId;
-    private Long laterUserId;
+    @ManyToOne
+    @MapsId("youngerMemberId")
+    @JoinColumn(name = "younger_member_id")
+    Member youngerMember;
+
+    @ManyToOne
+    @MapsId("olderMemberId")
+    @JoinColumn(name = "older_member_id")
+    Member olderMember;
 
     @Builder
-    Friendship(Long earlierUserId, Long laterUserId) {
-        this.earlierUserId = earlierUserId;
-        this.laterUserId = laterUserId;
+    Friendship(Member youngerMember, Member olderMember) {
+        this.id = new FriendshipId(youngerMember.getId(), olderMember.getId());
+        this.youngerMember = youngerMember;
+        this.olderMember = olderMember;
     }
 }
