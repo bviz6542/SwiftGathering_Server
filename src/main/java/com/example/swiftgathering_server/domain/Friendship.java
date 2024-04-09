@@ -16,12 +16,13 @@ public class Friendship {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long earlierUserId;
-    private Long laterUserId;
+    @ManyToOne
+    @MapsId("younger_member_id")
+    @JoinColumn(name = "younger_member_id")
+    Member youngerMember;
 
-    @Builder
-    Friendship(Long earlierUserId, Long laterUserId) {
-        this.earlierUserId = earlierUserId;
-        this.laterUserId = laterUserId;
-    }
+    @ManyToOne
+    @MapsId("older_member_id")
+    @JoinColumn(name = "older_member_id")
+    Member olderMember;
 }

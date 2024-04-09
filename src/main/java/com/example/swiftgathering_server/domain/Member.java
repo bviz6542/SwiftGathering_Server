@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,4 +26,10 @@ public class Member {
         this.loginId = loginId;
         this.loginPassword = loginPassword;
     }
+
+    @OneToMany(mappedBy = "youngerMember")
+    Set<Friendship> friendshipsWithYoungerMember;
+
+    @OneToMany(mappedBy = "olderMember")
+    Set<Friendship> friendshipsWithOlderMember;
 }
