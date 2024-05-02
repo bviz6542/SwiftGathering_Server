@@ -21,8 +21,13 @@ public class FriendshipRepository {
     }
 
     public List<Member> findAllFriendsOfUser(Member member) {
-        List<Member> olderFriends = em.createQuery("select m from Member m join m.friendshipsWithOlderMember f", Member.class).getResultList();
-        List<Member> youngerFriends = em.createQuery("select m from Member m join m.friendshipsWithYoungerMember f", Member.class).getResultList();
+        List<Member> olderFriends = em.createQuery("SELECT f.olderMember FROM Friendship f WHERE f.youngerMember = :member", Member.class)
+                .setParameter("member", member)
+                .getResultList();
+
+        List<Member> youngerFriends = em.createQuery("SELECT f.youngerMember FROM Friendship f WHERE f.olderMember = :member", Member.class)
+                .setParameter("member", member)
+                .getResultList();
 
         Set<Member> allFriends = new HashSet<>(olderFriends);
         allFriends.addAll(youngerFriends);
