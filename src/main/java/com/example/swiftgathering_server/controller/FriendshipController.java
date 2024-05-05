@@ -15,7 +15,7 @@ public class FriendshipController {
 
     private final FriendshipService friendshipService;
 
-    @PostMapping("/{memberId}/addFriend")
+    @PostMapping("/{memberId}/friends")
     public ResponseEntity<Long> addFriendship(@PathVariable Long memberId, @RequestParam Long friendId) {
         friendshipService.saveFriendship(memberId, friendId);
         return ResponseEntity
