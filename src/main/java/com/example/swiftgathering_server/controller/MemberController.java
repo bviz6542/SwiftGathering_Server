@@ -23,7 +23,7 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<Void> login(@RequestBody LoginDto loginDto) {
         try {
             memberService.verify(loginDto.getId(), loginDto.getPassword());
