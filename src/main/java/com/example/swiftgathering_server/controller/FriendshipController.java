@@ -1,12 +1,14 @@
 package com.example.swiftgathering_server.controller;
 
 import com.example.swiftgathering_server.domain.Member;
+import com.example.swiftgathering_server.dto.FriendInfoDto;
 import com.example.swiftgathering_server.service.FriendshipService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/members")
@@ -24,8 +26,11 @@ public class FriendshipController {
     }
 
     @GetMapping("/{memberId}/friends")
-    public ResponseEntity<List<Member>> listAllFriends(@PathVariable Long memberId) {
-        List<Member> friends = friendshipService.findAllFriendsOfUser(memberId);
+    public ResponseEntity<List<FriendInfoDto>> listAllFriends(@PathVariable Long memberId) {
+        List<FriendInfoDto> friends = friendshipService.findAllFriendsOfUser(memberId)
+                .stream()
+                .map(member -> new FriendInfoDto(member.getId(), member.getName()))
+                .collect(Collectors.toList());
         return ResponseEntity
                 .ok(friends);
     }

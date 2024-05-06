@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.Set;
 
@@ -20,13 +21,19 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
+    @Column(name = "login_id", unique = true)
     private String loginId;
+
     private String loginPassword;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @Builder
-    Member(String loginId, String loginPassword) {
+    Member(String loginId, String loginPassword, String name) {
         this.loginId = loginId;
         this.loginPassword = loginPassword;
+        this.name = name;
     }
 
     @JsonIgnore
