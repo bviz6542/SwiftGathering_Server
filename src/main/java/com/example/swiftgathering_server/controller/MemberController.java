@@ -1,5 +1,6 @@
 package com.example.swiftgathering_server.controller;
 
+import com.example.swiftgathering_server.dto.RegisterDto;
 import com.example.swiftgathering_server.dto.ResignDto;
 import com.example.swiftgathering_server.dto.LoginDto;
 import com.example.swiftgathering_server.service.MemberService;
@@ -15,20 +16,24 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping ("/members")
-    public ResponseEntity<Long> register(@RequestBody LoginDto loginDto) {
-        Long memberId = memberService.register(loginDto.getId(), loginDto.getPassword());
+    public ResponseEntity<Long> register(@RequestBody RegisterDto registerDto) {
+        Long memberId = memberService.register(
+                registerDto.getLoginId(),
+                registerDto.getLoginPassword(),
+                registerDto.getName()
+        );
         return ResponseEntity.ok(memberId);
     }
 
     @DeleteMapping("/members")
     public ResponseEntity<Void> resign(@RequestBody ResignDto resignDto) {
-        memberService.resign(resignDto.getId(), resignDto.getPassword());
+        memberService.resign(resignDto.getLoginId(), resignDto.getLoginPassword());
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/auth/login")
     public ResponseEntity<Void> login(@RequestBody LoginDto loginDto) {
-        memberService.verify(loginDto.getId(), loginDto.getPassword());
+        memberService.verify(loginDto.getLoginId(), loginDto.getLoginPassword());
         return ResponseEntity.ok().build();
     }
 }

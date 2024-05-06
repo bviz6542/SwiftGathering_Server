@@ -15,7 +15,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public Long register(String loginId, String loginPassword) {
+    public Long register(String loginId, String loginPassword, String name) {
         memberRepository.findByLoginId(loginId)
                 .ifPresent(m -> {
                     throw new EntityExistsException("Login ID already in use: " + loginId);
@@ -24,6 +24,7 @@ public class MemberService {
         Member member = Member.builder()
                 .loginId(loginId)
                 .loginPassword(loginPassword)
+                .name(name)
                 .build();
         return memberRepository.save(member);
     }
