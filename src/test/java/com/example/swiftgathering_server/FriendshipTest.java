@@ -35,14 +35,17 @@ public class FriendshipTest {
         Member member1 = Member.builder()
                 .loginId("111")
                 .loginPassword("11111")
+                .name("firsty")
                 .build();
         Member member2 = Member.builder()
                 .loginId("222")
                 .loginPassword("22222")
+                .name("secondy")
                 .build();
         Member member3 = Member.builder()
                 .loginId("333")
                 .loginPassword("33333")
+                .name("thirdy")
                 .build();
         Long member1Id = memberRepository.save(member1);
         Long member2Id = memberRepository.save(member2);
