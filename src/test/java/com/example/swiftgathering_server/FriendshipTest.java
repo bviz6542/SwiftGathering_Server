@@ -48,7 +48,7 @@ public class FriendshipTest {
         Long member2Id = memberRepository.save(member2);
         Long member3Id = memberRepository.save(member3);
         em.flush();
-
+ 
         // when
         Friendship friendshipOf1And2 = Friendship.builder()
                 .olderMember(member1)
