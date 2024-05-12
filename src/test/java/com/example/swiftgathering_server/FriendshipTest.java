@@ -69,5 +69,5 @@ public class FriendshipTest {
                 .toList();
         List<Long> expectedFriends = List.of(member1Id, member3Id);
         Assertions.assertArrayEquals(expectedFriends.toArray(), fetchedFriends.toArray());
-    } 
+    }  
 }
