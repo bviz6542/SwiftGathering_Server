@@ -35,9 +35,10 @@ public class MemberService {
         memberRepository.remove(member);
     }
 
-    public void verify(String loginId, String loginPassword) {
-        memberRepository
+    public Long verify(String loginId, String loginPassword) {
+        return memberRepository
                 .findByIdAndPassword(loginId, loginPassword)
+                .map(Member::getId)
                 .orElseThrow(() -> new AuthenticationException("Invalid login ID or password."));
     }
 }

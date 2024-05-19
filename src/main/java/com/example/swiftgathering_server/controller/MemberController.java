@@ -1,5 +1,6 @@
 package com.example.swiftgathering_server.controller;
 
+import com.example.swiftgathering_server.dto.MyInfoDTO;
 import com.example.swiftgathering_server.dto.RegisterDto;
 import com.example.swiftgathering_server.dto.ResignDto;
 import com.example.swiftgathering_server.dto.LoginDto;
@@ -32,8 +33,9 @@ public class MemberController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<Void> login(@RequestBody LoginDto loginDto) {
-        memberService.verify(loginDto.getLoginId(), loginDto.getLoginPassword());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<MyInfoDTO> login(@RequestBody LoginDto loginDto) {
+        Long memberId = memberService.verify(loginDto.getLoginId(), loginDto.getLoginPassword());
+        MyInfoDTO myInfoDTO = new MyInfoDTO(memberId);
+        return ResponseEntity.ok(myInfoDTO);
     }
 }
