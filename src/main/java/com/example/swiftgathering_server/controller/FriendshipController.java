@@ -1,6 +1,5 @@
 package com.example.swiftgathering_server.controller;
 
-import com.example.swiftgathering_server.domain.Member;
 import com.example.swiftgathering_server.dto.FriendInfoDto;
 import com.example.swiftgathering_server.service.FriendshipService;
 import org.springframework.http.ResponseEntity;
