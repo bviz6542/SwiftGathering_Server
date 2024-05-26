@@ -10,6 +10,6 @@ public class HealthController {
     @GetMapping
     public ResponseEntity<String> checkHealth() {
         return ResponseEntity
-                .ok("v1.0.4");
+                .ok("v1.0.5");
     }
 }
