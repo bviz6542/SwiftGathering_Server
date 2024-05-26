@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.Set;
 
@@ -43,4 +42,8 @@ public class Member {
     @JsonIgnore
     @OneToMany(mappedBy = "olderMember")
     Set<Friendship> friendshipsWithOlderMember;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "member")
+    private Set<FavoriteLocation> favoriteLocations;
 }
