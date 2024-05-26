@@ -5,12 +5,14 @@ import com.example.swiftgathering_server.domain.Member;
 import com.example.swiftgathering_server.dto.FavoriteLocationInputDto;
 import com.example.swiftgathering_server.repository.FavoriteLocationRepository;
 import com.example.swiftgathering_server.repository.MemberRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class FavoriteLocationService {
 

@@ -26,8 +26,8 @@ public class FavoriteLocationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FavoriteLocationOutputDto>> getAllLocationByMemberId(@PathVariable Long id) {
-     List<FavoriteLocationOutputDto> favoriteLocations = favoriteLocationService.getAllLocationByMemberId(id).stream()
+    public ResponseEntity<List<FavoriteLocationOutputDto>> getAllLocationByMemberId(@RequestParam Long memberId) {
+     List<FavoriteLocationOutputDto> favoriteLocations = favoriteLocationService.getAllLocationByMemberId(memberId).stream()
              .map(location -> new FavoriteLocationOutputDto(location.getId(), location.getLatitude(), location.getLongtitude(), location.getName(), location.getDescription()))
              .collect(Collectors.toList());
      return ResponseEntity
