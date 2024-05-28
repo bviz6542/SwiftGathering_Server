@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("locations")
+@RequestMapping("/locations")
 @RequiredArgsConstructor
 public class FavoriteLocationController {
 
@@ -20,17 +20,12 @@ public class FavoriteLocationController {
     @PostMapping
     public ResponseEntity<Void> saveFavoriteLocation(@RequestBody FavoriteLocationInputDto favoriteLocationInputDto) {
         favoriteLocationService.save(favoriteLocationInputDto);
-        return ResponseEntity
-                .ok()
-                .build();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping
     public ResponseEntity<List<FavoriteLocationOutputDto>> getAllLocationByMemberId(@RequestParam Long memberId) {
-     List<FavoriteLocationOutputDto> favoriteLocations = favoriteLocationService.getAllLocationByMemberId(memberId).stream()
-             .map(location -> new FavoriteLocationOutputDto(location.getId(), location.getLatitude(), location.getLongtitude(), location.getName(), location.getDescription()))
-             .collect(Collectors.toList());
-     return ResponseEntity
-             .ok(favoriteLocations);
+        List<FavoriteLocationOutputDto> favoriteLocations = favoriteLocationService.getAllLocationByMemberId(memberId);
+        return ResponseEntity.ok(favoriteLocations);
     }
 }
