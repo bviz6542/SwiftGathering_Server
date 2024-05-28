@@ -13,9 +13,9 @@ public class GatheringSessionRepository {
 
     private final EntityManager em;
 
-    public Long save(GatheringSession gatheringSession) {
+    public GatheringSession save(GatheringSession gatheringSession) {
         em.persist(gatheringSession);
-        return gatheringSession.getId();
+        return gatheringSession;
     }
 
     public Optional<GatheringSession> findById(Long id) {
