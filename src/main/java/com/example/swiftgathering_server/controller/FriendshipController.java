@@ -17,20 +17,14 @@ public class FriendshipController {
     private final FriendshipService friendshipService;
 
     @PostMapping("/{memberId}/friends")
-    public ResponseEntity<Long> addFriendship(@PathVariable Long memberId, @RequestParam Long friendId) {
+    public ResponseEntity<Void> addFriendship(@PathVariable Long memberId, @RequestParam Long friendId) {
         friendshipService.saveFriendship(memberId, friendId);
-        return ResponseEntity
-                .ok()
-                .build();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{memberId}/friends")
     public ResponseEntity<List<FriendInfoDto>> listAllFriends(@PathVariable Long memberId) {
-        List<FriendInfoDto> friends = friendshipService.findAllFriendsOfUser(memberId)
-                .stream()
-                .map(member -> new FriendInfoDto(member.getId(), member.getName()))
-                .collect(Collectors.toList());
-        return ResponseEntity
-                .ok(friends);
+        List<FriendInfoDto> friends = friendshipService.findAllFriendsOfUser(memberId);
+        return ResponseEntity.ok(friends);
     }
 }
