@@ -1,0 +1,52 @@
+name: CI/CD Docker
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to AWS
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_IMAGE: ${{ secrets.DOCKER_IMAGE }}
+          CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
+          AWS_HOST: ${{ secrets.AWS_HOST }}
+          AWS_USER: ${{ secrets.AWS_USER }}
+          RABBITMQ_HOST: ${{ secrets.RABBITMQ_HOST }}
+          RABBITMQ_PORT: ${{ secrets.RABBITMQ_PORT }}
+          RABBITMQ_USERNAME: ${{ secrets.RABBITMQ_USERNAME }}
+          RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
+          MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+          MYSQL_PORT: ${{ secrets.MYSQL_PORT }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        run: |
+          ssh -o StrictHostKeyChecking=no $AWS_USER@$AWS_HOST << 'EOF'
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            docker pull $DOCKER_IMAGE:latest
+            docker rm -f $CONTAINER_NAME || true
+            docker run -d -p 8080:8080 --name $CONTAINER_NAME \
+              -e RMQ_HOST=$RMQ_HOST \
+              -e RMQ_PORT=$RMQ_PORT \
+              -e RMQ_USERNAME=$RMQ_USERNAME \
+              -e RMQ_PASSWORD=$RMQ_PASSWORD \
+              -e MYSQL_URL=$MYSQL_URL \
+              -e MYSQL_USERNAME=$MYSQL_USERNAME \
+              -e MYSQL_PASSWORD=$MYSQL_PASSWORD \
+              $DOCKER_IMAGE:latest
+            docker system prune -f
+          EOF
