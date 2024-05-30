@@ -25,7 +25,7 @@ public class RabbitMqConfig {
     @Value("${spring.rabbitmq.password:guest}")
     private String password;
 
-    @Value("${spring.rabbitmq.port:15762}")
+    @Value("${spring.rabbitmq.port:5762}")
     private int port;
 
     @Bean
