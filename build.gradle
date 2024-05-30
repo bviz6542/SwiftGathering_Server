@@ -36,8 +36,19 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:mysql'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+    systemProperty 'spring.profiles.active', 'test'
+    environment 'MYSQL_URL', System.getenv('MYSQL_URL')
+    environment 'MYSQL_USERNAME', System.getenv('MYSQL_USERNAME')
+    environment 'MYSQL_PASSWORD', System.getenv('MYSQL_PASSWORD')
+    doFirst {
+        println "MYSQL_URL: ${System.getenv('MYSQL_URL')}"
+        println "MYSQL_USERNAME: ${System.getenv('MYSQL_USERNAME')}"
+        println "MYSQL_PASSWORD: ${System.getenv('MYSQL_PASSWORD')}"
+    }
 }
