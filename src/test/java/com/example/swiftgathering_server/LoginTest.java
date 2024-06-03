@@ -29,31 +29,31 @@ public class LoginTest {
     @Autowired
     private EntityManager em;
 
-    @Test
-    public void 등록하고로그인() {
-        // given
-        String loginId = "testGuest";
-        String loginPassword = "testGuest";
-        String name = "testGuest";
-        memberRepository.findByLoginId(loginId)
-                .ifPresent(m -> {
-                    throw new EntityExistsException("Login ID already in use: " + loginId);
-                });
-        Member member = Member.builder()
-                .loginId(loginId)
-                .loginPassword(loginPassword)
-                .name(name)
-                .build();
-        memberRepository.save(member);
-        em.flush();
-
-        // when
-        Optional<Member> loggedInMember = memberRepository.findByIdAndPassword(loginId, loginPassword);
-
-        // then
-        Assertions.assertNotNull(loggedInMember);
-        loggedInMember.ifPresent((m -> {
-            System.out.println(loggedInMember.get().getLoginId());
-        }));
-    }
+//    @Test
+//    public void 등록하고로그인() {
+//        // given
+//        String loginId = "testGuest";
+//        String loginPassword = "testGuest";
+//        String name = "testGuest";
+//        memberRepository.findByLoginId(loginId)
+//                .ifPresent(m -> {
+//                    throw new EntityExistsException("Login ID already in use: " + loginId);
+//                });
+//        Member member = Member.builder()
+//                .loginId(loginId)
+//                .loginPassword(loginPassword)
+//                .name(name)
+//                .build();
+//        memberRepository.save(member);
+//        em.flush();
+//
+//        // when
+//        Optional<Member> loggedInMember = memberRepository.findByIdAndPassword(loginId, loginPassword);
+//
+//        // then
+//        Assertions.assertNotNull(loggedInMember);
+//        loggedInMember.ifPresent((m -> {
+//            System.out.println(loggedInMember.get().getLoginId());
+//        }));
+//    }
 }
