@@ -20,13 +20,19 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
+    @Column(name = "login_id", unique = true)
     private String loginId;
+
     private String loginPassword;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @Builder
-    Member(String loginId, String loginPassword) {
+    Member(String loginId, String loginPassword, String name) {
         this.loginId = loginId;
         this.loginPassword = loginPassword;
+        this.name = name;
     }
 
     @JsonIgnore
@@ -36,4 +42,8 @@ public class Member {
     @JsonIgnore
     @OneToMany(mappedBy = "olderMember")
     Set<Friendship> friendshipsWithOlderMember;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "member")
+    private Set<FavoriteLocation> favoriteLocations;
 }

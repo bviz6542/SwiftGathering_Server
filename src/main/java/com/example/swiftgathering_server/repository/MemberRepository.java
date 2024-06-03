@@ -18,8 +18,17 @@ public class MemberRepository {
         return member.getId();
     }
 
-    public Member findOne(Long id) {
-        return em.find(Member.class, id);
+    public Optional<Member> findOne(Long id) {
+        Member member = em.find(Member.class, id);
+        return Optional.ofNullable(member);
+    }
+
+    public Optional<Member> findByLoginId(String loginId) {
+        return em.createQuery("select m from Member m where m.loginId = :loginId", Member.class)
+                .setParameter("loginId", loginId)
+                .getResultList()
+                .stream()
+                .findAny();
     }
 
     public Optional<Member> findByIdAndPassword(String id, String password) {
@@ -29,5 +38,9 @@ public class MemberRepository {
                 .getResultList()
                 .stream()
                 .findAny();
+    }
+
+    public void remove(Member member) {
+        em.remove(member);
     }
 }

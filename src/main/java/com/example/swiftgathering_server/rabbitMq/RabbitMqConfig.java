@@ -6,6 +6,7 @@ import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -25,22 +26,19 @@ public class RabbitMqConfig {
     @Value("${spring.rabbitmq.password:guest}")
     private String password;
 
-    @Value("${spring.rabbitmq.port:15762}")
+    @Value("${spring.rabbitmq.port:5762}")
     private int port;
 
-    @Bean
-    DirectExchange directExchange() {
-        return new DirectExchange("swift-gathering.exchange");
+    public Queue createQueue(Long memberId) {
+        return new Queue("swift-gathering.queue." + memberId, false);
     }
 
-    @Bean
-    Queue queue() {
-        return new Queue("swift-gathering.queue", false);
+    public DirectExchange createExchange(Long memberId) {
+        return new DirectExchange("swift-gathering.exchange." + memberId);
     }
 
-    @Bean
-    Binding binding(DirectExchange directExchange, Queue queue) {
-        return BindingBuilder.bind(queue).to(directExchange).with("swift-gathering.key");
+    public Binding createBinding(Long memberId) {
+        return BindingBuilder.bind(createQueue(memberId)).to(createExchange(memberId)).with("swift-gathering.routing." + memberId);
     }
 
     @Bean
@@ -63,5 +61,10 @@ public class RabbitMqConfig {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(messageConverter);
         return rabbitTemplate;
+    }
+
+    @Bean
+    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
+        return new RabbitAdmin(connectionFactory);
     }
 }

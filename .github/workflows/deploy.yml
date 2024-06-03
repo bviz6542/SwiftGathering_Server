@@ -1,0 +1,36 @@
+name: CI/CD Docker
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy to Instance
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            sudo docker pull ${{ secrets.DOCKER_IMAGE }}:latest
+            sudo docker rm -f ${{ secrets.CONTAINER_NAME }} || true
+            sudo docker run -d -p 8080:8080 --name ${{ secrets.CONTAINER_NAME }} \
+              -e RMQ_HOST=${{ secrets.RMQ_HOST }} \
+              -e RMQ_PORT=${{ secrets.RMQ_PORT }} \
+              -e RMQ_USERNAME=${{ secrets.RMQ_USERNAME }} \
+              -e RMQ_PASSWORD=${{ secrets.RMQ_PASSWORD }} \
+              -e MYSQL_URL=${{ secrets.MYSQL_URL }} \
+              -e MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
+              -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+              ${{ secrets.DOCKER_IMAGE }}:latest
+            sudo docker system prune -f
