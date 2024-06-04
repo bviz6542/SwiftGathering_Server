@@ -25,13 +25,16 @@ public class Member {
 
     private String loginPassword;
 
+    private String role;
+
     @Column(name = "name", nullable = false)
     private String name;
 
     @Builder
-    Member(String loginId, String loginPassword, String name) {
+    Member(String loginId, String loginPassword, String role, String name) {
         this.loginId = loginId;
         this.loginPassword = loginPassword;
+        this.role = role;
         this.name = name;
     }
 
