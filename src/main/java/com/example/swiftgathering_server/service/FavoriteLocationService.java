@@ -21,9 +21,9 @@ public class FavoriteLocationService {
     private final FavoriteLocationRepository favoriteLocationRepository;
     private final MemberRepository memberRepository;
 
-    public Long save(FavoriteLocationInputDto favoriteLocationInputDto) {
-        Member member = memberRepository.findOne(favoriteLocationInputDto.getMemberId())
-                .orElseThrow(() -> new IllegalArgumentException("No member found with ID: " + favoriteLocationInputDto.getMemberId()));
+    public Long save(Long memberId, FavoriteLocationInputDto favoriteLocationInputDto) {
+        Member member = memberRepository.findOne(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("No member found with ID: " + memberId));
         FavoriteLocation favoriteLocation = FavoriteLocation
                 .builder()
                 .member(member)
