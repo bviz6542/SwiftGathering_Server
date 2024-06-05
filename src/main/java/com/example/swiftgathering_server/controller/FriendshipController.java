@@ -10,19 +10,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/members")
+@RequestMapping("/members/{memberId}/friends")
 @RequiredArgsConstructor
 public class FriendshipController {
 
     private final FriendshipService friendshipService;
 
-    @PostMapping("/{memberId}/friends")
+    @PostMapping
     public ResponseEntity<Void> addFriendship(@PathVariable Long memberId, @RequestParam Long friendId) {
         friendshipService.saveFriendship(memberId, friendId);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{memberId}/friends")
+    @GetMapping
     public ResponseEntity<List<FriendInfoDto>> listAllFriends(@PathVariable Long memberId) {
         List<FriendInfoDto> friends = friendshipService.findAllFriendsOfUser(memberId);
         return ResponseEntity.ok(friends);
