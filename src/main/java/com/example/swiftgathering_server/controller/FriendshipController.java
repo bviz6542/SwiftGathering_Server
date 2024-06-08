@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class FriendshipController {
 
     private final FriendshipService friendshipService;
-
+    
     @GetMapping
     public ResponseEntity<List<FriendInfoDto>> listAllFriends(@PathVariable Long memberId) {
         List<FriendInfoDto> friends = friendshipService.findAllFriendsOfUser(memberId);
