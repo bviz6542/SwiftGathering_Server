@@ -39,12 +39,12 @@ public class Member {
     }
 
     @JsonIgnore
-    @OneToMany(mappedBy = "youngerMember")
-    Set<Friendship> friendshipsWithYoungerMember;
+    @OneToMany(mappedBy = "senderMember")
+    Set<Friendship> friendshipsWithSender;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "olderMember")
-    Set<Friendship> friendshipsWithOlderMember;
+    @OneToMany(mappedBy = "receiverMember")
+    Set<Friendship> friendshipsWithReceiver;
 
     @JsonIgnore
     @OneToMany(mappedBy = "member")
