@@ -9,26 +9,26 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "friendship")
+@Table(name = "friendship", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"sender_id", "receiver_id"})
+})
 public class Friendship {
 
-    @EmbeddedId
-    private FriendshipId id;
+    @Id
+    @GeneratedValue
+    private Long id;
 
     @ManyToOne
-    @MapsId("youngerMemberId")
-    @JoinColumn(name = "younger_member_id")
-    Member youngerMember;
+    @JoinColumn(name = "sender_id", nullable = false)
+    Member senderMember;
 
     @ManyToOne
-    @MapsId("olderMemberId")
-    @JoinColumn(name = "older_member_id")
-    Member olderMember;
+    @JoinColumn(name = "receiver_id", nullable = false)
+    Member receiverMember;
 
     @Builder
-    Friendship(Member youngerMember, Member olderMember) {
-        this.id = new FriendshipId(youngerMember.getId(), olderMember.getId());
-        this.youngerMember = youngerMember;
-        this.olderMember = olderMember;
+    Friendship(Member senderMember, Member receiverMember) {
+        this.senderMember = senderMember;
+        this.receiverMember = receiverMember;
     }
 }
