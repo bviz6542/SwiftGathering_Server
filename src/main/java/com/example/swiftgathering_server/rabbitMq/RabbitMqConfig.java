@@ -17,16 +17,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMqConfig {
 
-    @Value("${spring.rabbitmq.host:localhost}")
+    @Value("${spring.rabbitmq.host}")
     private String host;
 
-    @Value("${spring.rabbitmq.username:guest}")
+    @Value("${spring.rabbitmq.username}")
     private String username;
 
-    @Value("${spring.rabbitmq.password:guest}")
+    @Value("${spring.rabbitmq.password}")
     private String password;
 
-    @Value("${spring.rabbitmq.port:5762}")
+    @Value("${spring.rabbitmq.port}")
     private int port;
 
     public Queue createQueue(Long memberId) {
