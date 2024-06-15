@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "friendship", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"sender_id", "receiver_id"})
-})
+@Table(name = "friendship")
 public class Friendship {
 
     @Id

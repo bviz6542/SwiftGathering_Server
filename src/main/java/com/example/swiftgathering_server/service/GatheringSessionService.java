@@ -31,7 +31,7 @@ public class GatheringSessionService {
 
     private final GatheringSessionRepository gatheringSessionRepository;
     private final FlagLocationRepository flagLocationRepository;
-    private final RabbitAdmin rabbitAdmin;
+//    private final RabbitAdmin rabbitAdmin;
     private final AmqpTemplate amqpTemplate;
 
     public void createSession(CreateSessionRequestDto requestDto) {
@@ -81,9 +81,9 @@ public class GatheringSessionService {
             DirectExchange exchange = new DirectExchange("swift-gathering.exchange." + memberId);
             Binding binding = BindingBuilder.bind(queue).to(exchange).with("swift-gathering.routing." + memberId);
 
-            rabbitAdmin.declareQueue(queue);
-            rabbitAdmin.declareExchange(exchange);
-            rabbitAdmin.declareBinding(binding);
+//            rabbitAdmin.declareQueue(queue);
+//            rabbitAdmin.declareExchange(exchange);
+//            rabbitAdmin.declareBinding(binding);
 
             GatheringSessionNotificationDto notification = new GatheringSessionNotificationDto(session.getId(), memberIds);
 
