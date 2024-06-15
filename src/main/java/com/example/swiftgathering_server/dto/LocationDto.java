@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public class LocationDto {
     private Long senderId;
-    private Long channelId;
+    private String channelId;
     private Double latitude;
     private Double longitude;
 }

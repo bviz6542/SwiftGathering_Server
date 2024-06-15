@@ -14,6 +14,6 @@ public class WebSocketController {
 
     @MessageMapping("/location")
     public void location(LocationDto locationDto) {
-        simpMessageSendingOperations.convertAndSend("/sub/channel/" + locationDto.getChannelId(), locationDto);
+        simpMessageSendingOperations.convertAndSend("/topic/" + locationDto.getChannelId(), locationDto);
     }
 }
