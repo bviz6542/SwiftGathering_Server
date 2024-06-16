@@ -1,6 +1,8 @@
 package com.example.swiftgathering_server.jwt;
 
 import com.example.swiftgathering_server.dto.CustomUserDetails;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,8 +12,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -25,10 +30,21 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        String username = obtainUsername(request);
-        String password = obtainPassword(request);
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
-        return authenticationManager.authenticate(authToken);
+        try {
+            Map<String, String> credentials = extractCredentials(request);
+            UsernamePasswordAuthenticationToken authToken = createAuthToken(credentials);
+            return authenticationManager.authenticate(authToken);
+        } catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Map<String, String> extractCredentials(HttpServletRequest request) throws IOException {
+        return new ObjectMapper().readValue(request.getInputStream(), new TypeReference<Map<String, String>>() {});
+    }
+
+    private UsernamePasswordAuthenticationToken createAuthToken(Map<String, String> credentials) {
+        return new UsernamePasswordAuthenticationToken(credentials.get("username"), credentials.get("password"));
     }
 
     @Override
