@@ -1,10 +1,7 @@
 package com.example.swiftgathering_server.controller;
 
-import com.example.swiftgathering_server.dto.LoginDto;
-import com.example.swiftgathering_server.dto.MyInfoDto;
 import com.example.swiftgathering_server.dto.RegisterDto;
 import com.example.swiftgathering_server.dto.ResignDto;
-import com.example.swiftgathering_server.service.CustomUserDetailsService;
 import com.example.swiftgathering_server.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

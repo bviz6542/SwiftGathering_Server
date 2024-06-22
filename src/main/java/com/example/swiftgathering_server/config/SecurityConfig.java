@@ -2,7 +2,6 @@ package com.example.swiftgathering_server.config;
 
 import com.example.swiftgathering_server.jwt.JwtFilter;
 import com.example.swiftgathering_server.jwt.JwtUtil;
-import com.example.swiftgathering_server.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +24,7 @@ public class SecurityConfig {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
@@ -37,24 +37,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws  Exception {
-        http
-                .csrf((auth) -> auth.disable());
-        http
-                .formLogin((auth) -> auth.disable());
-        http
-                .httpBasic((auth) -> auth.disable());
-        http
-                .authorizeHttpRequests((auth) -> auth
+        http.csrf((auth) -> auth.disable());
+        http.formLogin((auth) -> auth.disable());
+        http.httpBasic((auth) -> auth.disable());
+
+        http.authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login", "/health", "/members", "/ws").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
-        http
-                .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
-        http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
-        http
-                .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.addFilterAt(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        http.sessionManagement((session) ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
 }
