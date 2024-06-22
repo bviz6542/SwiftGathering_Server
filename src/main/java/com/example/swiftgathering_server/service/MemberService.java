@@ -1,7 +1,7 @@
 package com.example.swiftgathering_server.service;
 
 import com.example.swiftgathering_server.domain.Member;
-import com.example.swiftgathering_server.dto.LoginDto;
+import com.example.swiftgathering_server.dto.LoginInputDto;
 import com.example.swiftgathering_server.dto.MyInfoDto;
 import com.example.swiftgathering_server.dto.RegisterDto;
 import com.example.swiftgathering_server.dto.ResignDto;
@@ -45,7 +45,7 @@ public class MemberService {
         memberRepository.remove(member);
     }
 
-    public MyInfoDto verify(LoginDto loginDto) {
+    public MyInfoDto verify(LoginInputDto loginDto) {
         Member member = memberRepository.findByLoginId(loginDto.getLoginId())
                 .orElseThrow(() -> new AuthenticationException("Invalid login ID or password."));
         if (!bCryptPasswordEncoder.matches(loginDto.getLoginPassword(), member.getLoginPassword())) {
