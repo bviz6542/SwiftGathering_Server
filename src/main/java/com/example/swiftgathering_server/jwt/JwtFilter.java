@@ -39,7 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String role = jwtUtil.getRole(token);
 
         Member member = Member.builder()
-                .loginId(username)
+                .loginUsername(username)
                 .loginPassword("dummyPassword")
                 .role(role)
                 .name("dummyName")

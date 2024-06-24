@@ -21,7 +21,7 @@ public class AuthService {
 
     public LoginOutputDto authenticateAndGenerateToken(LoginInputDto loginInputDto) {
         try {
-            String username = loginInputDto.getLoginId();
+            String username = loginInputDto.getLoginUsername();
             String password = loginInputDto.getLoginPassword();
 
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
@@ -30,7 +30,8 @@ public class AuthService {
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("Role not found"))
                     .getAuthority();
-            String token = jwtUtil.createJwt(username, role, 60 * 60 * 10L);
+          
+            String token = jwtUtil.createJwt(username, role, 60 * 60 * 1000L);
 
             Long memberId = memberRepository.findByLoginId(username)
                     .orElseThrow(() -> new RuntimeException("Invalid login ID or password."))
