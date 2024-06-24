@@ -30,6 +30,7 @@ public class AuthService {
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("Role not found"))
                     .getAuthority();
+          
             String token = jwtUtil.createJwt(username, role, 60 * 60 * 1000L);
 
             Long memberId = memberRepository.findByLoginId(username)
