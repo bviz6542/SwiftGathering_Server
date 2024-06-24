@@ -20,9 +20,10 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "login_id", unique = true)
-    private String loginId;
+    @Column(name = "login_username", unique = true, nullable = false)
+    private String loginUsername;
 
+    @Column(name = "login_password", unique = true, nullable = false)
     private String loginPassword;
 
     private String role;
@@ -31,8 +32,8 @@ public class Member {
     private String name;
 
     @Builder
-    Member(String loginId, String loginPassword, String role, String name) {
-        this.loginId = loginId;
+    Member(String loginUsername, String loginPassword, String role, String name) {
+        this.loginUsername = loginUsername;
         this.loginPassword = loginPassword;
         this.role = role;
         this.name = name;
@@ -47,6 +48,6 @@ public class Member {
     Set<Friendship> friendshipsWithReceiver;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<FavoriteLocation> favoriteLocations;
 }

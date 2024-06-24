@@ -28,7 +28,6 @@ public class FriendshipRepository {
                 .getResultList();
         Set<Member> allFriends = new HashSet<>(friends1);
         allFriends.addAll(friends2);
-        allFriends.remove(member);
         return new ArrayList<>(allFriends)
                 .stream()
                 .sorted(Comparator.comparing(Member::getId))

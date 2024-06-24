@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "friendship")
+@Table(name = "friendship", uniqueConstraints = { @UniqueConstraint(columnNames = { "sender", "receiver" }) })
 public class Friendship {
 
     @Id
@@ -17,11 +17,11 @@ public class Friendship {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "sender_id", nullable = false)
+    @JoinColumn(name = "sender", nullable = false)
     Member senderMember;
 
     @ManyToOne
-    @JoinColumn(name = "receiver_id", nullable = false)
+    @JoinColumn(name = "receiver", nullable = false)
     Member receiverMember;
 
     @Builder

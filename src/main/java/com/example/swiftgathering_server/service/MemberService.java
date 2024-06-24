@@ -29,7 +29,7 @@ public class MemberService {
 
         String encodedPassword = bCryptPasswordEncoder.encode(registerDto.getLoginPassword());
         Member member = Member.builder()
-                .loginId(registerDto.getLoginId())
+                .loginUsername(registerDto.getLoginId())
                 .loginPassword(encodedPassword)
                 .name(registerDto.getName())
                 .build();
@@ -46,7 +46,7 @@ public class MemberService {
     }
 
     public MyInfoDto verify(LoginInputDto loginDto) {
-        Member member = memberRepository.findByLoginId(loginDto.getLoginId())
+        Member member = memberRepository.findByLoginId(loginDto.getLoginUsername())
                 .orElseThrow(() -> new AuthenticationException("Invalid login ID or password."));
         if (!bCryptPasswordEncoder.matches(loginDto.getLoginPassword(), member.getLoginPassword())) {
             throw new AuthenticationException("Invalid login ID or password.");
