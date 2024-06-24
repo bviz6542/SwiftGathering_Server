@@ -1,6 +1,6 @@
 package com.example.swiftgathering_server.controller;
 
-import com.example.swiftgathering_server.dto.FriendRequestInputDto;
+import com.example.swiftgathering_server.dto.FriendRequestCreateDto;
 import com.example.swiftgathering_server.dto.FriendRequestOutputDto;
 import com.example.swiftgathering_server.dto.FriendRequestUpdateDto;
 import com.example.swiftgathering_server.service.FriendRequestService;
@@ -18,8 +18,8 @@ public class FriendRequestController {
     private final FriendRequestService friendRequestService;
 
     @PostMapping
-    public ResponseEntity<Void> sendFriendRequest(@PathVariable Long memberId, @RequestBody FriendRequestInputDto friendRequestDto) {
-        friendRequestService.sendFriendRequest(memberId, friendRequestDto);
+    public ResponseEntity<Void> sendFriendRequest(@PathVariable Long memberId, @RequestBody FriendRequestCreateDto friendRequestCreateDto) {
+        friendRequestService.sendFriendRequest(memberId, friendRequestCreateDto);
         return ResponseEntity.ok().build();
     }
 
