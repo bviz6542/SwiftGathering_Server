@@ -30,7 +30,6 @@ public class GatheringSessionService {
 
     private final GatheringSessionRepository gatheringSessionRepository;
     private final FlagLocationRepository flagLocationRepository;
-//    private final RabbitAdmin rabbitAdmin;
     private final AmqpTemplate amqpTemplate;
 
     public void createSession(CreateSessionRequestDto requestDto) {

@@ -1,8 +1,6 @@
 package com.example.swiftgathering_server.service;
 
 import com.example.swiftgathering_server.domain.Member;
-import com.example.swiftgathering_server.dto.LoginInputDto;
-import com.example.swiftgathering_server.dto.MyInfoDto;
 import com.example.swiftgathering_server.dto.RegisterDto;
 import com.example.swiftgathering_server.dto.ResignDto;
 import com.example.swiftgathering_server.repository.MemberRepository;
@@ -22,14 +20,14 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Long register(RegisterDto registerDto) {
-        memberRepository.findByLoginId(registerDto.getLoginId())
+        memberRepository.findByLoginUsername(registerDto.getLoginUsername())
                 .ifPresent(m -> {
-                    throw new EntityExistsException("Login ID already in use: " + registerDto.getLoginId());
+                    throw new EntityExistsException("Login ID already in use: " + registerDto.getLoginUsername());
                 });
 
         String encodedPassword = bCryptPasswordEncoder.encode(registerDto.getLoginPassword());
         Member member = Member.builder()
-                .loginUsername(registerDto.getLoginId())
+                .loginUsername(registerDto.getLoginUsername())
                 .loginPassword(encodedPassword)
                 .name(registerDto.getName())
                 .build();
@@ -37,20 +35,11 @@ public class MemberService {
     }
 
     public void resign(ResignDto resignDto) {
-        Member member = memberRepository.findByLoginId(resignDto.getLoginId())
+        Member member = memberRepository.findByLoginUsername(resignDto.getLoginUsername())
                 .orElseThrow(() -> new AuthenticationException("Invalid login ID or password."));
         if (!bCryptPasswordEncoder.matches(resignDto.getLoginPassword(), member.getLoginPassword())) {
             throw new AuthenticationException("Invalid login ID or password.");
         }
         memberRepository.remove(member);
-    }
-
-    public MyInfoDto verify(LoginInputDto loginDto) {
-        Member member = memberRepository.findByLoginId(loginDto.getLoginUsername())
-                .orElseThrow(() -> new AuthenticationException("Invalid login ID or password."));
-        if (!bCryptPasswordEncoder.matches(loginDto.getLoginPassword(), member.getLoginPassword())) {
-            throw new AuthenticationException("Invalid login ID or password.");
-        }
-        return new MyInfoDto(member.getId());
     }
 }

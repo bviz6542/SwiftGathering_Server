@@ -3,7 +3,7 @@ package com.example.swiftgathering_server.service;
 import com.example.swiftgathering_server.domain.FriendRequest;
 import com.example.swiftgathering_server.domain.Friendship;
 import com.example.swiftgathering_server.domain.Member;
-import com.example.swiftgathering_server.dto.FriendRequestInputDto;
+import com.example.swiftgathering_server.dto.FriendRequestCreateDto;
 import com.example.swiftgathering_server.dto.FriendRequestOutputDto;
 import com.example.swiftgathering_server.dto.FriendRequestUpdateDto;
 import com.example.swiftgathering_server.repository.FriendRequestRepository;
@@ -25,8 +25,8 @@ public class FriendRequestService {
     private final MemberRepository memberRepository;
     private final FriendshipRepository friendshipRepository;
 
-    public void sendFriendRequest(Long memberId, FriendRequestInputDto friendRequestDto) {
-        Long receiverId = friendRequestDto.getReceiverId();
+    public Long sendFriendRequest(Long memberId, FriendRequestCreateDto friendRequestCreateDto) {
+        Long receiverId = friendRequestCreateDto.getReceiverId();
         Member sender = memberRepository.findOne(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("No member found with ID: " + memberId));
         Member receiver = memberRepository.findOne(receiverId)
@@ -36,7 +36,7 @@ public class FriendRequestService {
                 .receiverMember(receiver)
                 .requestStatus(FriendRequest.RequestStatus.PENDING)
                 .build();
-        friendRequestRepository.save(friendRequest);
+        return friendRequestRepository.save(friendRequest);
     }
 
     @Transactional(readOnly = true)

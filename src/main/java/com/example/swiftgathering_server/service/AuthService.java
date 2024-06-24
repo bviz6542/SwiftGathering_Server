@@ -11,8 +11,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AuthService {
     private final MemberRepository memberRepository;
@@ -33,7 +35,7 @@ public class AuthService {
           
             String token = jwtUtil.createJwt(username, role, 60 * 60 * 1000L);
 
-            Long memberId = memberRepository.findByLoginId(username)
+            Long memberId = memberRepository.findByLoginUsername(username)
                     .orElseThrow(() -> new RuntimeException("Invalid login ID or password."))
                     .getId();
 

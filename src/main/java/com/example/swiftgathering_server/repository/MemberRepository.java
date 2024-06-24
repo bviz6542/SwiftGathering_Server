@@ -23,9 +23,9 @@ public class MemberRepository {
         return Optional.ofNullable(member);
     }
 
-    public Optional<Member> findByLoginId(String loginId) {
-        return em.createQuery("select m from Member m where m.loginUsername = :loginId", Member.class)
-                .setParameter("loginId", loginId)
+    public Optional<Member> findByLoginUsername(String loginUsername) {
+        return em.createQuery("select m from Member m where m.loginUsername = :loginUsername", Member.class)
+                .setParameter("loginUsername", loginUsername)
                 .getResultList()
                 .stream()
                 .findAny();

@@ -2,8 +2,15 @@ package com.example.swiftgathering_server;
 
 import com.example.swiftgathering_server.domain.Friendship;
 import com.example.swiftgathering_server.domain.Member;
+import com.example.swiftgathering_server.dto.FriendInfoDto;
+import com.example.swiftgathering_server.dto.FriendRequestCreateDto;
+import com.example.swiftgathering_server.dto.FriendRequestUpdateDto;
+import com.example.swiftgathering_server.dto.RegisterDto;
 import com.example.swiftgathering_server.repository.FriendshipRepository;
 import com.example.swiftgathering_server.repository.MemberRepository;
+import com.example.swiftgathering_server.service.FriendRequestService;
+import com.example.swiftgathering_server.service.FriendshipService;
+import com.example.swiftgathering_server.service.MemberService;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -21,10 +31,13 @@ import java.util.List;
 public class FriendshipTest {
 
     @Autowired
-    private FriendshipRepository friendshipRepository;
+    private MemberService memberService;
 
     @Autowired
-    private MemberRepository memberRepository;
+    private FriendRequestService friendRequestService;
+
+    @Autowired
+    private FriendshipService friendshipService;
 
     @Autowired
     private EntityManager em;
@@ -32,45 +45,29 @@ public class FriendshipTest {
     @Test
     public void 친구목록() {
         // given
-        Member member1 = Member.builder()
-                .loginId("111")
-                .loginPassword("11111")
-                .name("firsty")
-                .build();
-        Member member2 = Member.builder()
-                .loginId("222")
-                .loginPassword("22222")
-                .name("secondy")
-                .build();
-        Member member3 = Member.builder()
-                .loginId("333")
-                .loginPassword("33333")
-                .name("thirdy")
-                .build();
-        Long member1Id = memberRepository.save(member1);
-        Long member2Id = memberRepository.save(member2);
-        Long member3Id = memberRepository.save(member3);
+        RegisterDto registerDto0 = new RegisterDto("member0", "asdasdf", "mem0");
+        Long member0Id = memberService.register(registerDto0);
+        RegisterDto registerDto1 = new RegisterDto("member1", "asdasdf", "mem1");
+        Long member1Id = memberService.register(registerDto1);
+        RegisterDto registerDto2 = new RegisterDto("member2", "asdasdf", "mem2");
+        Long member2Id = memberService.register(registerDto2);
         em.flush();
  
         // when
-        Friendship friendshipOf1And2 = Friendship.builder()
-                .olderMember(member1)
-                .youngerMember(member2)
-                .build();
-        Friendship friendshipOf2And3 = Friendship.builder()
-                .olderMember(member2)
-                .youngerMember(member3)
-                .build();
-        friendshipRepository.save(friendshipOf1And2);
-        friendshipRepository.save(friendshipOf2And3);
-        em.flush();
+        FriendRequestCreateDto friendRequestCreateDto0to1 = new FriendRequestCreateDto(member1Id);
+        Long request0to1Id = friendRequestService.sendFriendRequest(member0Id, friendRequestCreateDto0to1);
+        FriendRequestCreateDto friendRequestCreateDto0to2 = new FriendRequestCreateDto(member2Id);
+        Long request0to2Id = friendRequestService.sendFriendRequest(member0Id, friendRequestCreateDto0to2);
+
+        FriendRequestUpdateDto friendRequestUpdateDto1to0 = new FriendRequestUpdateDto(request0to1Id, true);
+        friendRequestService.updateFriendRequestStatus(member1Id, friendRequestUpdateDto1to0);
+        FriendRequestUpdateDto friendRequestUpdateDto2to0 = new FriendRequestUpdateDto(request0to2Id, false);
+        friendRequestService.updateFriendRequestStatus(member2Id, friendRequestUpdateDto2to0);
 
         // then
-        List<Long> fetchedFriends = friendshipRepository.findAllFriendsOfUser(member2)
-                .stream()
-                .map(Member::getId)
-                .toList();
-        List<Long> expectedFriends = List.of(member1Id, member3Id);
-        Assertions.assertArrayEquals(expectedFriends.toArray(), fetchedFriends.toArray());
+        List<Long> resultIds = friendshipService.findAllFriendsOfUser(member0Id)
+                .stream().map(FriendInfoDto::getId).collect(Collectors.toList());
+        List<Long> expectedIds = Arrays.asList(new Long[]{member1Id});
+        Assertions.assertEquals(expectedIds, resultIds);
     }  
 }
