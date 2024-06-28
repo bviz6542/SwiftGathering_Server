@@ -1,4 +1,4 @@
-package com.example.swiftgathering_server.dto;
+package com.example.swiftgathering_server.dto.session;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

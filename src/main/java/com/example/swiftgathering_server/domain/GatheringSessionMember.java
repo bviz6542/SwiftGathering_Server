@@ -23,6 +23,8 @@ public class GatheringSessionMember {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    private Boolean isParticipating;
+
     @Builder
     public GatheringSessionMember(GatheringSession gatheringSession, Member member) {
         this.gatheringSession = gatheringSession;

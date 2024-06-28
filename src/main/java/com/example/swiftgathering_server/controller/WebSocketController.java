@@ -16,4 +16,9 @@ public class WebSocketController {
     public void location(LocationDto locationDto) {
         simpMessageSendingOperations.convertAndSend("/topic/" + locationDto.getChannelId(), locationDto);
     }
+
+    @MessageMapping("/private")
+    public void gatheringRequest() {
+
+    }
 }

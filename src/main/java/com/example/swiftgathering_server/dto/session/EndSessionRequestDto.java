@@ -1,4 +1,4 @@
-package com.example.swiftgathering_server.dto;
+package com.example.swiftgathering_server.dto.session;
 
 
 import com.example.swiftgathering_server.domain.FlagLocation;
