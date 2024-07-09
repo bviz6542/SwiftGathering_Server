@@ -6,8 +6,8 @@ import java.util.List;
 
 @Getter
 public class GatheringSessionNotificationDto {
-    private Long sessionId;
-    private List<Long> memberIds;
+    final private Long sessionId;
+    final private List<Long> memberIds;
 
     public GatheringSessionNotificationDto(Long sessionId, List<Long> memberIds) {
         this.sessionId = sessionId;

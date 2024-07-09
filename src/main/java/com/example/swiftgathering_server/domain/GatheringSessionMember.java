@@ -6,26 +6,22 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Embeddable
 public class GatheringSessionMember {
+    private Long memberId;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "gathering_session_id")
-    private GatheringSession gatheringSession;
-
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @Enumerated(EnumType.STRING)
+    private GatheringSessionMemberStatus status;
 
     @Builder
-    public GatheringSessionMember(GatheringSession gatheringSession, Member member) {
-        this.gatheringSession = gatheringSession;
-        this.member = member;
+    public GatheringSessionMember(Long memberId, GatheringSessionMemberStatus status) {
+        this.memberId = memberId;
+        this.status = status;
+    }
+
+    public void setStatus(GatheringSessionMemberStatus status) {
+        this.status = status;
     }
 }

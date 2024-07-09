@@ -1,7 +1,7 @@
 package com.example.swiftgathering_server.controller;
 
 import com.example.swiftgathering_server.dto.CreateSessionRequestDto;
-import com.example.swiftgathering_server.dto.EndSessionRequestDto;
+import com.example.swiftgathering_server.dto.ParticipateSessionRequestDto;
 import com.example.swiftgathering_server.service.GatheringSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +20,9 @@ public class GatheringSessionController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> endSession(@PathVariable Long id, @RequestBody EndSessionRequestDto requestDto) {
-        gatheringSessionService.endSession(id, requestDto);
+    @PatchMapping
+    public ResponseEntity<Void> participateSession(@RequestBody ParticipateSessionRequestDto participateSessionRequestDto) {
+        gatheringSessionService.participateSession(participateSessionRequestDto);
         return ResponseEntity.ok().build();
     }
 }

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,10 +22,9 @@ public class GatheringSession {
 
     private UUID sessionId = UUID.randomUUID();
     private LocalDateTime createdTime;
-    private LocalDateTime endedTime;
 
-    @OneToMany(mappedBy = "gatheringSession", cascade = CascadeType.ALL)
-    private List<GatheringSessionMember> gatheringSessionMembers;
+    @ElementCollection
+    private List<GatheringSessionMember> gatheringSessionMembers = new ArrayList<>();
 
     @OneToMany(mappedBy = "gatheringSession", cascade = CascadeType.ALL)
     private List<FlagLocation> locations;
@@ -33,10 +33,5 @@ public class GatheringSession {
     public GatheringSession(List<GatheringSessionMember> gatheringSessionMembers, LocalDateTime createdTime) {
         this.gatheringSessionMembers = gatheringSessionMembers;
         this.createdTime = createdTime;
-    }
-
-    public void endSession(LocalDateTime endedTime, List<FlagLocation> locations) {
-        this.endedTime = endedTime;
-        this.locations = locations;
     }
 }

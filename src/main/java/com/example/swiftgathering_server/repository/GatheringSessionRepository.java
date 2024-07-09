@@ -18,6 +18,10 @@ public class GatheringSessionRepository {
         return gatheringSession;
     }
 
+    public GatheringSession update(GatheringSession gatheringSession) {
+        return em.merge(gatheringSession);
+    }
+
     public Optional<GatheringSession> findById(Long id) {
         GatheringSession gatheringSession = em.find(GatheringSession.class, id);
         return Optional.of(gatheringSession);

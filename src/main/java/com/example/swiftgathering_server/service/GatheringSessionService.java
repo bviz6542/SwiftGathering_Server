@@ -1,14 +1,12 @@
 package com.example.swiftgathering_server.service;
 
-import com.example.swiftgathering_server.domain.FlagLocation;
-import com.example.swiftgathering_server.domain.GatheringSession;
-import com.example.swiftgathering_server.domain.GatheringSessionMember;
-import com.example.swiftgathering_server.domain.Member;
+import com.example.swiftgathering_server.domain.*;
 import com.example.swiftgathering_server.dto.CreateSessionRequestDto;
-import com.example.swiftgathering_server.dto.EndSessionRequestDto;
 import com.example.swiftgathering_server.dto.GatheringSessionNotificationDto;
-import com.example.swiftgathering_server.repository.FlagLocationRepository;
+import com.example.swiftgathering_server.dto.ParticipateSessionRequestDto;
+import com.example.swiftgathering_server.exception.ResourceNotFoundException;
 import com.example.swiftgathering_server.repository.GatheringSessionRepository;
+import com.example.swiftgathering_server.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -20,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,63 +25,56 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GatheringSessionService {
 
+    private final MemberRepository memberRepository;
     private final GatheringSessionRepository gatheringSessionRepository;
-    private final FlagLocationRepository flagLocationRepository;
+//    private final FlagLocationRepository flagLocationRepository;
     private final AmqpTemplate amqpTemplate;
 
     public void createSession(CreateSessionRequestDto requestDto) {
-        List<GatheringSessionMember> members = requestDto.getMembers();
-        LocalDateTime createdTime = LocalDateTime.now();
-        GatheringSession session = GatheringSession.builder()
-                .gatheringSessionMembers(members)
-                .createdTime(createdTime)
-                .build();
-        GatheringSession sessionId = gatheringSessionRepository.save(session);
-        notifyClients(sessionId);
-        return;
-    }
-
-    public void endSession(Long sessionId, EndSessionRequestDto requestDto) {
-        GatheringSession session = gatheringSessionRepository.findById(sessionId)
-                .orElseThrow(() -> new NoSuchElementException("Session not found"));
-
-        LocalDateTime endedTime = LocalDateTime.now();
-
-        List<FlagLocation> flagLocations = requestDto.getFlagLocations().stream()
-                .map(dto -> FlagLocation.builder()
-                        .latitude(dto.getLatitude())
-                        .longitude(dto.getLongitude())
-                        .name(dto.getName())
-                        .createdTime(dto.getCreatedTime() != null ? dto.getCreatedTime() : LocalDateTime.now())
-                        .gatheringSession(session)
+        List<GatheringSessionMember> sessionMembers = memberRepository
+                .findAllByIds(requestDto.getGuestIds()).stream()
+                .map(member -> GatheringSessionMember.builder()
+                        .memberId(member.getId())
+                        .status(GatheringSessionMemberStatus.INVITED)
                         .build())
                 .collect(Collectors.toList());
 
-        session.endSession(endedTime, flagLocations);
+        LocalDateTime createdTime = LocalDateTime.now();
+        GatheringSession session = GatheringSession.builder()
+                .gatheringSessionMembers(sessionMembers)
+                .createdTime(createdTime)
+                .build();
 
-        flagLocationRepository.saveAll(flagLocations);
+        GatheringSession savedSession = gatheringSessionRepository.save(session);
+        notifyClients(savedSession);
+    }
 
-        gatheringSessionRepository.save(session);
-        return;
+    public void participateSession(ParticipateSessionRequestDto requestDto) {
+        GatheringSession session = gatheringSessionRepository.findById(requestDto.getSessionId())
+                .orElseThrow(() -> new ResourceNotFoundException("Session not found"));
+
+        session.getGatheringSessionMembers().stream()
+                .filter(member -> member.getMemberId().equals(requestDto.getMemberId()))
+                .findFirst()
+                .ifPresentOrElse(
+                        member -> member.setStatus(GatheringSessionMemberStatus.PARTICIPATED),
+                        () -> {
+                            throw new IllegalStateException("Member not invited to the session");
+                        });
+
+        gatheringSessionRepository.update(session);
     }
 
     private void notifyClients(GatheringSession session) {
         List<Long> memberIds = session.getGatheringSessionMembers().stream()
-                .map(GatheringSessionMember::getMember)
-                .map(Member::getId)
+                .map(GatheringSessionMember::getMemberId)
                 .collect(Collectors.toList());
 
         for (Long memberId : memberIds) {
             Queue queue = new Queue("swift-gathering.queue." + memberId, false);
             DirectExchange exchange = new DirectExchange("swift-gathering.exchange." + memberId);
             Binding binding = BindingBuilder.bind(queue).to(exchange).with("swift-gathering.routing." + memberId);
-
-//            rabbitAdmin.declareQueue(queue);
-//            rabbitAdmin.declareExchange(exchange);
-//            rabbitAdmin.declareBinding(binding);
-
             GatheringSessionNotificationDto notification = new GatheringSessionNotificationDto(session.getId(), memberIds);
-
             amqpTemplate.convertAndSend(exchange.getName(), binding.getRoutingKey(), notification);
         }
     }
