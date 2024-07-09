@@ -7,10 +7,10 @@ import java.util.List;
 @Getter
 public class GatheringSessionNotificationDto {
     final private Long sessionId;
-    final private List<Long> memberIds;
+    final private List<Long> participantIds;
 
-    public GatheringSessionNotificationDto(Long sessionId, List<Long> memberIds) {
+    public GatheringSessionNotificationDto(Long sessionId, List<Long> participantIds) {
         this.sessionId = sessionId;
-        this.memberIds = memberIds;
+        this.participantIds = participantIds;
     }
 }
