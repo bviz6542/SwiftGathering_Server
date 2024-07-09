@@ -1,6 +1,7 @@
 package com.example.swiftgathering_server.repository;
 
 import com.example.swiftgathering_server.domain.FriendRequest;
+import com.example.swiftgathering_server.domain.Friendship;
 import com.example.swiftgathering_server.domain.Member;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,10 @@ public class FriendRequestRepository {
     public Long save(FriendRequest friendRequest) {
         em.persist(friendRequest);
         return friendRequest.getId();
+    }
+
+    public void update(FriendRequest friendRequest) {
+        em.merge(friendRequest);
     }
 
     public Optional<FriendRequest> findById(Long requestId) {

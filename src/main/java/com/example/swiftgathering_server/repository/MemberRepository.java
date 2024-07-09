@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -29,6 +30,12 @@ public class MemberRepository {
                 .getResultList()
                 .stream()
                 .findAny();
+    }
+
+    public List<Member> findAllByIds(List<Long> ids) {
+        return em.createQuery("select m from Member m where m.id in :ids", Member.class)
+                .setParameter("ids", ids)
+                .getResultList();
     }
 
     public void remove(Member member) {

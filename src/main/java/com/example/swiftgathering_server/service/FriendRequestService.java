@@ -64,6 +64,6 @@ public class FriendRequestService {
         } else {
             friendRequest.setRequestStatus(false);
         }
-        friendRequestRepository.save(friendRequest);
+        friendRequestRepository.update(friendRequest);
     }
 }
