@@ -2,6 +2,7 @@ package com.example.swiftgathering_server.service;
 
 import com.example.swiftgathering_server.domain.*;
 import com.example.swiftgathering_server.dto.CreateSessionRequestDto;
+import com.example.swiftgathering_server.dto.CreatedSessionIdDto;
 import com.example.swiftgathering_server.dto.GatheringSessionNotificationDto;
 import com.example.swiftgathering_server.dto.ParticipateSessionRequestDto;
 import com.example.swiftgathering_server.exception.ResourceNotFoundException;
@@ -26,7 +27,7 @@ public class GatheringSessionService {
 //    private final FlagLocationRepository flagLocationRepository;
     private final SimpMessageSendingOperations messagingTemplate;
 
-    public void createSession(CreateSessionRequestDto requestDto) {
+    public CreatedSessionIdDto createSession(CreateSessionRequestDto requestDto) {
         List<GatheringSessionMember> sessionMembers = memberRepository
                 .findAllByIds(requestDto.getGuestIds()).stream()
                 .map(member -> GatheringSessionMember.builder()
@@ -43,6 +44,8 @@ public class GatheringSessionService {
 
         GatheringSession savedSession = gatheringSessionRepository.save(session);
         notifyClients(savedSession);
+
+        return new CreatedSessionIdDto(savedSession.getSessionId().toString());
     }
 
     public void participateSession(ParticipateSessionRequestDto requestDto) {
@@ -67,7 +70,7 @@ public class GatheringSessionService {
                 .collect(Collectors.toList());
 
         for (Long memberId : memberIds) {
-            GatheringSessionNotificationDto notification = new GatheringSessionNotificationDto(session.getId(), memberIds);
+            GatheringSessionNotificationDto notification = new GatheringSessionNotificationDto(session.getSessionId().toString(), memberIds);
             messagingTemplate.convertAndSend("/topic/private." + memberId, notification);
         }
     }

@@ -1,6 +1,7 @@
 package com.example.swiftgathering_server.controller;
 
 import com.example.swiftgathering_server.dto.CreateSessionRequestDto;
+import com.example.swiftgathering_server.dto.CreatedSessionIdDto;
 import com.example.swiftgathering_server.dto.ParticipateSessionRequestDto;
 import com.example.swiftgathering_server.service.GatheringSessionService;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +16,9 @@ public class GatheringSessionController {
     private final GatheringSessionService gatheringSessionService;
 
     @PostMapping
-    public ResponseEntity<Void> createSession(@RequestBody CreateSessionRequestDto requestDto) {
-        gatheringSessionService.createSession(requestDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<CreatedSessionIdDto> createSession(@RequestBody CreateSessionRequestDto requestDto) {
+        CreatedSessionIdDto createdSessionIdDto = gatheringSessionService.createSession(requestDto);
+        return ResponseEntity.ok(createdSessionIdDto);
     }
 
     @PatchMapping

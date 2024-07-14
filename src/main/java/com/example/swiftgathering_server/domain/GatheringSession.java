@@ -20,7 +20,7 @@ public class GatheringSession {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private UUID sessionId = UUID.randomUUID();
+    private final UUID sessionId = UUID.randomUUID();
     private LocalDateTime createdTime;
 
     @ElementCollection
