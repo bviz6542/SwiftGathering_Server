@@ -68,7 +68,7 @@ public class GatheringSessionService {
 
         for (Long memberId : memberIds) {
             GatheringSessionNotificationDto notification = new GatheringSessionNotificationDto(session.getId(), memberIds);
-            messagingTemplate.convertAndSend("/topic/private/" + memberId, notification);
+            messagingTemplate.convertAndSend("/topic/private." + memberId, notification);
         }
     }
 }
