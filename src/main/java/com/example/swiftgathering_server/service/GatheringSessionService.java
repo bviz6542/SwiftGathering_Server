@@ -2,17 +2,14 @@ package com.example.swiftgathering_server.service;
 
 import com.example.swiftgathering_server.domain.*;
 import com.example.swiftgathering_server.dto.CreateSessionRequestDto;
+import com.example.swiftgathering_server.dto.CreatedSessionIdDto;
 import com.example.swiftgathering_server.dto.GatheringSessionNotificationDto;
 import com.example.swiftgathering_server.dto.ParticipateSessionRequestDto;
 import com.example.swiftgathering_server.exception.ResourceNotFoundException;
 import com.example.swiftgathering_server.repository.GatheringSessionRepository;
 import com.example.swiftgathering_server.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,9 +25,9 @@ public class GatheringSessionService {
     private final MemberRepository memberRepository;
     private final GatheringSessionRepository gatheringSessionRepository;
 //    private final FlagLocationRepository flagLocationRepository;
-    private final AmqpTemplate amqpTemplate;
+    private final SimpMessageSendingOperations messagingTemplate;
 
-    public void createSession(CreateSessionRequestDto requestDto) {
+    public CreatedSessionIdDto createSession(CreateSessionRequestDto requestDto) {
         List<GatheringSessionMember> sessionMembers = memberRepository
                 .findAllByIds(requestDto.getGuestIds()).stream()
                 .map(member -> GatheringSessionMember.builder()
@@ -47,6 +44,8 @@ public class GatheringSessionService {
 
         GatheringSession savedSession = gatheringSessionRepository.save(session);
         notifyClients(savedSession);
+
+        return new CreatedSessionIdDto(savedSession.getSessionId().toString());
     }
 
     public void participateSession(ParticipateSessionRequestDto requestDto) {
@@ -71,11 +70,8 @@ public class GatheringSessionService {
                 .collect(Collectors.toList());
 
         for (Long memberId : memberIds) {
-            Queue queue = new Queue("swift-gathering.queue." + memberId, false);
-            DirectExchange exchange = new DirectExchange("swift-gathering.exchange." + memberId);
-            Binding binding = BindingBuilder.bind(queue).to(exchange).with("swift-gathering.routing." + memberId);
-            GatheringSessionNotificationDto notification = new GatheringSessionNotificationDto(session.getId(), memberIds);
-            amqpTemplate.convertAndSend(exchange.getName(), binding.getRoutingKey(), notification);
+            GatheringSessionNotificationDto notification = new GatheringSessionNotificationDto(session.getSessionId().toString(), memberIds);
+            messagingTemplate.convertAndSend("/topic/private." + memberId, notification);
         }
     }
 }
