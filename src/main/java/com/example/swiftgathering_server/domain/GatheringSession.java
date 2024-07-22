@@ -20,7 +20,9 @@ public class GatheringSession {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private final UUID sessionId = UUID.randomUUID();
+    @Column(nullable = false, unique = true)
+    private UUID sessionId;
+
     private LocalDateTime createdTime;
 
     @ElementCollection
@@ -31,6 +33,7 @@ public class GatheringSession {
 
     @Builder
     public GatheringSession(List<GatheringSessionMember> gatheringSessionMembers, LocalDateTime createdTime) {
+        this.sessionId = UUID.randomUUID();
         this.gatheringSessionMembers = gatheringSessionMembers;
         this.createdTime = createdTime;
     }
