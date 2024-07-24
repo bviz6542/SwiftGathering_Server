@@ -1,13 +1,9 @@
 package com.example.swiftgathering_server;
 
-import com.example.swiftgathering_server.domain.Friendship;
-import com.example.swiftgathering_server.domain.Member;
 import com.example.swiftgathering_server.dto.FriendInfoDto;
 import com.example.swiftgathering_server.dto.FriendRequestCreateDto;
 import com.example.swiftgathering_server.dto.FriendRequestUpdateDto;
 import com.example.swiftgathering_server.dto.RegisterDto;
-import com.example.swiftgathering_server.repository.FriendshipRepository;
-import com.example.swiftgathering_server.repository.MemberRepository;
 import com.example.swiftgathering_server.service.FriendRequestService;
 import com.example.swiftgathering_server.service.FriendshipService;
 import com.example.swiftgathering_server.service.MemberService;
@@ -20,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
