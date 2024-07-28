@@ -25,10 +25,6 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_IMAGE }}:latest
             sudo docker rm -f ${{ secrets.CONTAINER_NAME }} || true
             sudo docker run -d -p 8080:8080 --name ${{ secrets.CONTAINER_NAME }} \
-              -e RMQ_HOST=${{ secrets.RMQ_HOST }} \
-              -e RMQ_PORT=${{ secrets.RMQ_PORT }} \
-              -e RMQ_USERNAME=${{ secrets.RMQ_USERNAME }} \
-              -e RMQ_PASSWORD=${{ secrets.RMQ_PASSWORD }} \
               -e MYSQL_URL=${{ secrets.MYSQL_URL }} \
               -e MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
               -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
