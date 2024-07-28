@@ -23,12 +23,16 @@ jobs:
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             sudo docker pull ${{ secrets.DOCKER_IMAGE }}:latest
+            
+            EXISTING_CONTAINER=$(sudo docker ps --filter "publish=8080" -q)
+            if [ ! -z "$EXISTING_CONTAINER" ]; then
+              echo "Stopping and removing existing container on port 8080"
+              sudo docker stop $EXISTING_CONTAINER
+              sudo docker rm $EXISTING_CONTAINER
+            fi
             sudo docker rm -f ${{ secrets.CONTAINER_NAME }} || true
+            
             sudo docker run -d -p 8080:8080 --name ${{ secrets.CONTAINER_NAME }} \
-              -e RMQ_HOST=${{ secrets.RMQ_HOST }} \
-              -e RMQ_PORT=${{ secrets.RMQ_PORT }} \
-              -e RMQ_USERNAME=${{ secrets.RMQ_USERNAME }} \
-              -e RMQ_PASSWORD=${{ secrets.RMQ_PASSWORD }} \
               -e MYSQL_URL=${{ secrets.MYSQL_URL }} \
               -e MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
               -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
