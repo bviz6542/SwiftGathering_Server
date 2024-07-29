@@ -20,17 +20,11 @@ public class FriendshipRepository {
     }
 
     public List<Member> findAllFriendsOfUser(Member member) {
-        List<Member> friends1 = em.createQuery("select f.senderMember from Friendship f where f.receiverMember = :member", Member.class)
+        return em.createQuery("select m from Member m " +
+                "where m in (select f.senderMember from Friendship f where f.receiverMember = :member) " +
+                "or m in (select f.receiverMember from Friendship f where f.senderMember = :member)", Member.class)
                 .setParameter("member", member)
                 .getResultList();
-        List<Member> friends2 = em.createQuery("select f.receiverMember from Friendship f where f.senderMember = :member", Member.class)
-                .setParameter("member", member)
-                .getResultList();
-        Set<Member> allFriends = new HashSet<>(friends1);
-        allFriends.addAll(friends2);
-        return new ArrayList<>(allFriends)
-                .stream()
-                .sorted(Comparator.comparing(Member::getId))
-                .toList();
     }
 }
+
