@@ -27,8 +27,8 @@ jobs:
         with:
           files: ${{ env.RESOURCE_PATH }}
         env:
-          spring.jwt.secret = ${{ secrets.JWT_SECRET_KEY }}
-          spring.datasource.url = ${{ secrets.MYSQL_URL }}
+          spring.jwt.secret: ${{ secrets.JWT_SECRET_KEY }}
+          spring.datasource.url: ${{ secrets.MYSQL_URL }}
           spring.datasource.username: ${{ secrets.MYSQL_USERNAME }}
           spring.datasource.password: ${{ secrets.MYSQL_PASSWORD }}
           
