@@ -1,7 +1,7 @@
 name: CI/CD Docker
 
 env:
-  RESOURCE_PATH: ./src/main/resources/application.properties
+  RESOURCE_PATH: ./src/main/resources/application.yml
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
         
-      - name: Fill up properties from github
+      - name: Fill up yml from github
         uses: microsoft/variable-substitution@v1
         with:
           files: ${{ env.RESOURCE_PATH }}
