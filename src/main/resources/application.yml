@@ -1,0 +1,26 @@
+spring:
+  profiles:
+    include: mysql
+
+  sql:
+    init:
+      mode: always
+
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.MySQLDialect
+    defer-datasource-initialization: true
+
+  jwt:
+    secret: ${JWT_SECRET_KEY}
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}

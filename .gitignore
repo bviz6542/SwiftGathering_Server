@@ -1,6 +1,12 @@
 HELP.md
 .gradle
-build/
+
+# Ignore everything in the build directory
+build/*
+# But not the libs directory and its contents
+!build/libs/
+!build/libs/*
+
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
